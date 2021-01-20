@@ -2,33 +2,45 @@
 
 import React, { useState, useCallback } from 'react';
 
-import { SocketProvider, useSocketEvent } from './util/socket';
+import { useSocket } from './util/socket';
 
 const App = () => {
-    const [serverMessages, setServerMessages] = useState([]);
+    const socket = useSocket();
 
-    const onMessageServer = useCallback(
-        message => {
-            setServerMessages([...serverMessages, message]);
-        },
-        [serverMessages]
-    );
+    const [name, setName] = useState();
+    const [roomCode, setRoomCode] = useState('');
 
-    useSocketEvent('message', onMessageServer);
+    const onNameChange = useCallback(({ target: { value } }) => setName(value), []);
+
+    const onRoomCodeChange = useCallback(({ target: { value } }) => setRoomCode(value), []);
+
+    const requestJoinGame = useCallback(() => {
+        socket.emit('join', roomCode);
+    }, [roomCode, socket]);
 
     return (
-        <SocketProvider>
-            <div className="container mx-auto">
-                <div className="grid grid-cols-1 gap-2">
-                    <h3 className="text-2xl">Messages from server</h3>
-                    {serverMessages.map((message, idx) => (
-                        <div key={idx} className="text-pink-700">
-                            {message}
-                        </div>
-                    ))}
-                </div>
+        <div className="container flex flex-col justify-around mx-auto h-screen">
+            <div className="grid grid-cols-1 gap-8">
+                <input
+                    className="rounded-md text-blue-500 placeholder-blue-400 text-5xl border border-blue-500 shadow"
+                    value={name}
+                    placeholder={`Name`}
+                    onChange={onNameChange}
+                />
+                <input
+                    className="rounded-md text-blue-500 placeholder-blue-400 text-5xl border border-blue-500 shadow"
+                    value={roomCode}
+                    placeholder={`Room Code`}
+                    onChange={onRoomCodeChange}
+                />
+                <button
+                    className="rounded-md text-white bg-blue-500 text-5xl hover:text-blue-500 hover:bg-white"
+                    onClick={requestJoinGame}
+                >
+                    JOIN
+                </button>
             </div>
-        </SocketProvider>
+        </div>
     );
 };
 
