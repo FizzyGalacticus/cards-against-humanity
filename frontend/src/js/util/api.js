@@ -2,7 +2,7 @@ const protocol = process.env.API_PROTOCOL ?? 'http';
 const host = process.env.API_HOST ?? 'localhost';
 const port = process.env.API_PORT ?? 10001;
 
-const getApiBase = () => `${protocol}://${host}:${port}`;
+export const getApiBase = () => `${protocol}://${host}:${port}`;
 
 const normalizeQuery = query =>
     typeof query !== 'string'
@@ -45,4 +45,4 @@ export const request = async (path, { query = '', payload, body, ...options } = 
 
 export const post = (path, options = {}) => request(path, { ...options, method: 'POST' });
 
-export default { request, post };
+export default { getApiBase, request, post };

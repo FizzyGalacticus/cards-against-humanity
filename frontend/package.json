@@ -1,9 +1,9 @@
 {
-  "name": "fullstack-app-template-fe",
+  "name": "cah-fe",
   "version": "1.0.0",
   "main": "dist/index.html",
   "author": "Dustin L. Dodson",
-  "license": "Apache2.0",
+  "license": "MIT",
   "private": false,
   "type": "module",
   "scripts": {
@@ -16,6 +16,7 @@
     "postcss": "^8.2.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "socket.io-client": "^3.1.0",
     "tailwindcss": "^2.0.2"
   }
 }

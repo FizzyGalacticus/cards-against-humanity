@@ -8,58 +8,9 @@ services:
             - 9999:8000
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        command: --no-auth
 
-    template_database:
-        container_name: 'template_database'
-        build:
-            context: ./backend
-            target: template-be-blank-db
-            args:
-                - DB_USER=template
-                - DB_PASS=template
-                - DB_NAME=template
-        environment:
-            PGDATA: /var/lib/postgresql/data/pgdata
-        volumes:
-            - ./pgdata:/var/lib/postgresql/data/pgdata
-        ports:
-            - 10000:5432
-
-    template_database_up:
-        container_name: 'template_database_up'
-        build:
-            context: ./backend
-            target: db-migrations
-        environment:
-            - DB_USER=template
-            - DB_PASS=template
-            - DB_NAME=template
-            - DB_HOST=template_database
-        volumes:
-            - ./backend/database/migrations:/var/app/migrations
-            - ./backend/database/lib:/var/app/lib
-            - ./backend/database/bin:/var/app/bin
-        command: "yarn dbup"
-
-    template_database_down:
-        container_name: 'template_database_down'
-        build:
-            context: ./backend
-            target: db-migrations
-        environment:
-            - DB_USER=template
-            - DB_PASS=template
-            - DB_NAME=template
-            - DB_HOST=template_database
-        volumes:
-            - ./backend/database/migrations:/var/app/migrations
-            - ./backend/database/lib:/var/app/lib
-            - ./backend/database/bin:/var/app/bin
-        command: "yarn dbdown"
-
-    template_backend:
-        container_name: 'template_backend'
+    cah_backend:
+        container_name: 'cah_backend'
         build:
             context: ./backend
             target: be-development
@@ -69,16 +20,16 @@ services:
         ports:
             - 10001:3000
 
-    template_backend_deployment:
-        container_name: 'template_backend'
+    cah_backend_deployment:
+        container_name: 'cah_backend'
         build:
             context: ./backend
             target: be-deployment
         ports:
             - 10001:3000
 
-    template_frontend:
-        container_name: 'template_frontend'
+    cah_frontend:
+        container_name: 'cah_frontend'
         build:
             context: ./frontend
             target: fe-development
@@ -93,11 +44,11 @@ services:
 # Allow container to maintain proper node_modules
 volumes:
   be-reserved:
-    name: template_be_node_modules
+    name: cah_be_node_modules
   fe-reserved-nm:
-    name: template_fe_node_modules
+    name: cah_fe_node_modules
   fe-reserved-dist:
-    name: template_fe_dist
+    name: cah_fe_dist
 
 networks:
   full_stack_template:

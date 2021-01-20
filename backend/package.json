@@ -1,22 +1,18 @@
 {
-  "name": "fullstack-app-template-be",
+  "name": "cah-be",
   "version": "1.0.0",
   "main": "app/app.js",
   "author": "Dustin L. Dodson",
-  "license": "Apache2.0",
+  "license": "MIT",
   "private": false,
   "scripts": {
     "start": "node app/app.js",
-    "dev": "nodemon",
-    "dbup": "db-migrate --config config.js up",
-    "dbdown": "db-migrate --config config.js down"
-  },
-  "devDependencies": {
-    "db-migrate": "^1.0.0-beta.14",
-    "db-migrate-pg": "^1.2.2"
+    "dev": "nodemon"
   },
   "dependencies": {
+    "@hapi/wreck": "^17.1.0",
     "fastify": "^3.9.2",
-    "fastify-cors": "^5.1.0"
+    "fastify-cors": "^5.1.0",
+    "fastify-socket.io": "^1.0.1"
   }
 }

@@ -1,2 +1,2 @@
-# Fullstack App Template
-A template for a fullstack app using Fastify, Postgres, and React.
+# Cards Against Humanity
+A Cards Against Humanity client + server written with Fastify, React, Tailwind CSS, and Socket.io.

@@ -2,59 +2,33 @@
 
 import React, { useState, useCallback } from 'react';
 
-import api from './util/api';
-
-const handleReq = (path, options, setValue, setClass) =>
-    api
-        .request('', options)
-        .then(r => {
-            setValue(r);
-            setClass('text-green-500');
-        })
-        .catch(e => {
-            setClass('text-red-500');
-            setValue(e.message);
-        });
+import { SocketProvider, useSocketEvent } from './util/socket';
 
 const App = () => {
-    const [getText, setGetText] = useState('');
-    const [getClass, setGetClass] = useState('');
-    const [postText, setPostText] = useState('');
-    const [postClass, setPostClass] = useState('');
+    const [serverMessages, setServerMessages] = useState([]);
 
-    const sendGetReq = useCallback(() => handleReq('', {}, setGetText, setGetClass), [setGetText, setGetClass]);
-
-    const sendPostReq = useCallback(
-        () =>
-            handleReq(
-                '',
-                { method: 'POST', payload: { message: 'this is a test payload' } },
-                setPostText,
-                setPostClass
-            ),
-        [setPostText, setPostClass]
+    const onMessageServer = useCallback(
+        message => {
+            setServerMessages([...serverMessages, message]);
+        },
+        [serverMessages]
     );
 
+    useSocketEvent('message', onMessageServer);
+
     return (
-        <div className="container mx-auto">
-            <div className="grid grid-cols-1 gap-2">
-                <div>Message from the Frontend: Hello from the frontend!</div>
-                <div>
-                    GET request result: <span className={getClass}>{getText}</span>
-                </div>
-                <div>
-                    POST request result: <span className={postClass}>{postText}</span>
-                </div>
-                <div className="grid grid-cols-8 gap-3">
-                    <button className="rounded text-white bg-blue-500" onClick={sendGetReq}>
-                        Test API GET
-                    </button>
-                    <button className="rounded text-white bg-blue-500" onClick={sendPostReq}>
-                        Test API POST
-                    </button>
+        <SocketProvider>
+            <div className="container mx-auto">
+                <div className="grid grid-cols-1 gap-2">
+                    <h3 className="text-2xl">Messages from server</h3>
+                    {serverMessages.map((message, idx) => (
+                        <div key={idx} className="text-pink-700">
+                            {message}
+                        </div>
+                    ))}
                 </div>
             </div>
-        </div>
+        </SocketProvider>
     );
 };
 
